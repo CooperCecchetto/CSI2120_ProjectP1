@@ -18,12 +18,6 @@ public class Point3D {
     }
 
     public String toString() {
-        return getX() + ", " + getY() + ", " + getZ();
-    }
-
-    //calculates euclidean distance between selected point and point pt
-    public double distance(Point3D pt){
-        //euclidean distance = sqrt(sum of squared differences)
-        return Math.sqrt(Math.pow((getX() - pt.getX()), 2) + Math.pow((getY() - pt.getY()), 2) + Math.pow((getZ() - pt.getZ()), 2));
+        return getX() + "\t" + getY() + "\t" + getZ();
     }
 }

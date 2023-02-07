@@ -60,4 +60,10 @@ public class Plane3D {
     public double getDistance(Point3D pt){
         return Math.abs(this.a*pt.getX() + this.b*pt.getY() + this.c*pt.getZ() + this.d) / Math.sqrt(Math.pow(this.a, 2) + Math.pow(this.b, 2) + Math.pow(this.c, 2));
     }
+
+    public String toString(){
+        return("Plane defined by equation: "
+                + a + "x + " + b + "y + "
+                + c + "z + " + d + " = 0");
+    }
 }

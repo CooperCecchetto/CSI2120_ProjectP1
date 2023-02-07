@@ -69,11 +69,11 @@ public class PointCloud {
 
     // Creates empty point cloud
     PointCloud(){
-        points = new ArrayList<>();
+        this.points = new ArrayList<>();
     }
 
     public void addPoint(Point3D pt){
-        points.add(pt);
+        this.points.add(pt);
     }
 
     // Returns one point at random.

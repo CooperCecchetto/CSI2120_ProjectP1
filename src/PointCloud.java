@@ -1,4 +1,11 @@
-
+/**
+ * Cooper Cecchetto
+ * 300228878
+ * CSI 2120
+ * February 6th, 2023
+ *
+ * Represents a group of points in 3D space
+ */
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -13,8 +20,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 public class PointCloud {
-    // Represents point cloud with an arraylist of points
-    ArrayList<Point3D> points = null;
+    ArrayList<Point3D> points;
 
     PointCloud(String filename){
         //puts points in xyz file into list
@@ -39,16 +45,17 @@ public class PointCloud {
         }
     }
 
+    /**
+     * Prints all points within a cloud into a file and names it according to given convention
+     * @param filename Desired file name
+     * @param num Number to append to name regarding hierarchy of dominant planes
+     */
     public void save(String filename, int num) {
-        System.out.println("X\tY\tZ");
-        for (Point3D p : points) {
-            System.out.println(p.getX() + "\t" + p.getY() + "\t" + p.getZ());
-        }
-
         //creates output file with details of all recorded points
         String newFileName = filename.split("\\.")[0] + "_p" + num + ".xyz";
 
         File file = new File(newFileName);
+        //writes out all points from cloud and closes file
         try {
             FileWriter outFile = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(outFile);
@@ -72,12 +79,12 @@ public class PointCloud {
         this.points = new ArrayList<>();
     }
 
+    // Adds point to a cloud
     public void addPoint(Point3D pt){
         this.points.add(pt);
     }
 
     // Returns one point at random.
-
     public Point3D getPoint(){
         if(points != null){
             Random r = new Random();
@@ -90,6 +97,7 @@ public class PointCloud {
         }
     }
 
+    //Generates a plane from point cloud at random by selecting 3 distinct random points
     public Plane3D getPlane(){
         Point3D p1 = getPoint();
         Point3D p2 = getPoint();

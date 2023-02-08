@@ -1,3 +1,11 @@
+/**
+ * Cooper Cecchetto
+ * 300228878
+ * CSI 2120
+ * February 6th, 2023
+ *
+ * Represents a point in a 3D space with x y and z coordinates
+ */
 public class Point3D {
     private double X, Y, Z;
 

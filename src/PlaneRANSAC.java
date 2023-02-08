@@ -3,22 +3,20 @@
  * 300228878
  * CSI 2120
  * February 6th, 2023
+ *
+ * RANSAC algorithm
  */
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlaneRANSAC {
-
     PointCloud pc, tmpCloud, dominantCloud;
     Plane3D dominantPlane;
     Plane3D tmpPlane;
     private double eps;
 
+    // Generates instance of ransac for specified point cloud, and initializes dominant cloud
     public PlaneRANSAC(PointCloud pc) {
         this.pc = pc;
-        this.tmpCloud = new PointCloud();
-        this.dominantCloud = new PointCloud();
-        this.dominantPlane = null;
+        this.dominantCloud = new PointCloud();;
     }
 
     public void setEps(double eps){
@@ -29,50 +27,56 @@ public class PlaneRANSAC {
         return eps;
     }
 
-    public void RANSAC(PointCloud pc){
-
-        //return tmpPlane;
-    }
-
+    //Calculation for number of iterations of ransac algorithm to find dominant plane
+    //with specified confidence and estimated percentage of points on said plane
     public int getNumberOfIterations(double confidence, double percentageOfPointsOnPlane){
         return (int) Math.ceil(Math.log(1 - confidence) / Math.log(1 - Math.pow(percentageOfPointsOnPlane, 3)));
     }
 
+    //Runs ransac algorithm numberOfIterations times to find the dominant plane of a cloud
     public void run(int numberOfIterations, String filename){
 
-        for (int j = 0; j < 3; j++){
+        dominantCloud.points.clear();
+        dominantPlane = new Plane3D(0,0,0,0);
 
-            for (int i = 0; i < numberOfIterations; i++) {
-                tmpCloud.points.clear();
-                tmpPlane = pc.getPlane();
+        for (int i = 0; i < numberOfIterations; i++) {
 
-                for (Point3D point : pc.points) {
-                    double distance = tmpPlane.getDistance(point);
-                    if(distance <= eps){
-                        tmpCloud.addPoint(point);
-                    }
-                }
+            tmpCloud = new PointCloud();
+            tmpPlane = pc.getPlane();
 
-                if (tmpCloud.points.size() > dominantCloud.points.size()) {
-                    dominantCloud = tmpCloud;
-                    dominantPlane = tmpPlane;
+            for (Point3D point : pc.points) {
+                if(tmpPlane.getDistance(point) <= getEps()){
+                    tmpCloud.addPoint(point);
                 }
             }
+            if (tmpCloud.points.size() > dominantCloud.points.size()) {
+                dominantCloud = tmpCloud;
+                dominantPlane = tmpPlane;
+            }
+        }
+    }
 
+    public static void main(String args[]){
+        String[] file = new String[3];
+        file[0] = "PointCloud1.xyz";
+        file[1] = "PointCloud2.xyz";
+        file[2] = "PointCloud3.xyz";
+        PointCloud pc = new PointCloud(file[0]);
+        PlaneRANSAC pr = new PlaneRANSAC(pc);
+        pr.setEps(0.3);
+        for(int i = 0; i < 3; i++) {
+            pr.run(pr.getNumberOfIterations(0.99, 0.1), file[2]);
 
-            dominantCloud.save(filename, (j+1));
+            System.out.println("Dominant plane " + (i + 1) + " defined by equation "
+                    + pr.dominantPlane.getA() + "x + " + pr.dominantPlane.getB() + "y + "
+                    + pr.dominantPlane.getC() + "z + " + pr.dominantPlane.getD() + " = 0");
 
-            for(Point3D p : dominantCloud.points){
+            pr.dominantCloud.save(file[2], i+1);
+
+            for(Point3D p : pr.dominantCloud.points){
                 pc.points.remove(p);
             }
         }
-        pc.save(filename, 0);
-    }
-
-
-    public static void main(String args[]){
-        PlaneRANSAC pr;
-        pr.setEps(3);
-        pr.run(pr.getNumberOfIterations(0.99, 0.8), "PointCloud1.xyz");
+        pc.save(file[2], 0);
     }
 }

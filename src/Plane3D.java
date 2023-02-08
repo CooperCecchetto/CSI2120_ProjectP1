@@ -1,9 +1,12 @@
-import java.util.ArrayList;
-
+/**
+ * Cooper Cecchetto
+ * 300228878
+ * CSI 2120
+ * February 6th, 2023
+ *
+ * Represents a 3D plane by its a b c and d values in the equation of form ax + by + cz + d = 0
+ */
 public class Plane3D {
-    /**
-     * Describes a plane by its a b c and d values in the equation of form ax + by + cz + d = 0
-     */
     private double a, b, c, d;
 
     public double getA() {

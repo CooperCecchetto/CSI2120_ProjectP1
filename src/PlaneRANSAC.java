@@ -9,14 +9,13 @@
 
 public class PlaneRANSAC {
     PointCloud pc, tmpCloud, dominantCloud;
-    Plane3D dominantPlane;
-    Plane3D tmpPlane;
+    Plane3D dominantPlane, tmpPlane;
     private double eps;
 
     // Generates instance of ransac for specified point cloud, and initializes dominant cloud
     public PlaneRANSAC(PointCloud pc) {
         this.pc = pc;
-        this.dominantCloud = new PointCloud();;
+        this.dominantCloud = new PointCloud();
     }
 
     public void setEps(double eps){
@@ -56,7 +55,7 @@ public class PlaneRANSAC {
         }
     }
 
-    public static void main(String args[]){
+    public static void main(String[] args){
         String[] file = new String[3];
         file[0] = "PointCloud1.xyz";
         file[1] = "PointCloud2.xyz";
@@ -65,18 +64,18 @@ public class PlaneRANSAC {
         PlaneRANSAC pr = new PlaneRANSAC(pc);
         pr.setEps(0.3);
         for(int i = 0; i < 3; i++) {
-            pr.run(pr.getNumberOfIterations(0.99, 0.1), file[2]);
+            pr.run(pr.getNumberOfIterations(0.99, 0.1), file[0]);
 
             System.out.println("Dominant plane " + (i + 1) + " defined by equation "
                     + pr.dominantPlane.getA() + "x + " + pr.dominantPlane.getB() + "y + "
                     + pr.dominantPlane.getC() + "z + " + pr.dominantPlane.getD() + " = 0");
 
-            pr.dominantCloud.save(file[2], i+1);
+            pr.dominantCloud.save(file[0], i+1);
 
             for(Point3D p : pr.dominantCloud.points){
                 pc.points.remove(p);
             }
         }
-        pc.save(file[2], 0);
+        pc.save(file[0], 0);
     }
 }
